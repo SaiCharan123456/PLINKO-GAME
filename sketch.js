@@ -13,6 +13,10 @@ var score =0;
 var count = 0;
 var gameState = "start";
 
+function preload(){
+bg=loadImage("bg.jpg");
+}
+
 function setup() {
   createCanvas(1000, 640);
   engine = Engine.create();
@@ -48,6 +52,11 @@ function setup() {
 
   //create particle objects
   particle = new Particle(random(20,780),50,15);
+
+  //gover=createSprite(250,530,10,10);
+  //gover.addImage(Over);
+
+  over1 = new Over(250,530);
     
 }
  
@@ -55,14 +64,26 @@ function setup() {
 
 function draw() {
   background("black");
-  textSize(20);
-  fill("white");
-  text("SCORE : "+score,20,40);
+  
  
   textSize(20);
   fill("white");
   text(mouseX+","+mouseY,mouseX,mouseY); 
+  
+  image(bg,500,320,1000,640);
 
+ for (var i = 0; i < plinkos.length; i++) {
+    plinkos[i].display();   
+  }
+   
+  //display the divisions
+   for (var k = 0; k < divisions.length; k++) {
+    divisions[k].display();
+  }
+     
+textSize(20);
+  fill("white");
+  text("SCORE : "+score,20,40);
   textSize(20);
   fill("orange");
   text("10000000",505 ,530);
@@ -79,55 +100,16 @@ function draw() {
   fill("yellow");
   text("10000",910 ,530);
   text("10000",7 ,530);
+  //particle.visiable=true;
   Engine.update(engine);
   ground.display();
-  
-  if ( gameState =="launch"){
-    background("black");
-  textSize(100);
-  fill("yellow");
-  text("YOU WIN : "+score,20,300);  
-  
-  textSize(70);
-  fill("yellow");
-  text("press space to restart the game",10,400); 
-  
-  if(keyCode === 32 && gameState==="launch"){
-    gameState="restart";
-  }
- } 
+  over1.display();
+ 
+ 
 
- if ( gameState =="end"){
-  background("black");
-textSize(100);
-fill("yellow");
-text("YOU LOST",20,300); 
 
-  textSize(70);
-  fill("yellow");
-  text("press space to restart the game",10,400);
-
-  if(keyCode === 32 && gameState==="end"){
-    gameState="restart";
-  }
-} 
-
-if(gameState ==="restart"){
-  score = 0;
-  count = 0;
-  particle!=null;
-  gameState="start";
-  //gameState!="launch";
-}
   //display the plinkos 
-  for (var i = 0; i < plinkos.length; i++) {
-    plinkos[i].display();   
-  }
-   
-  //display the divisions
-   for (var k = 0; k < divisions.length; k++) {
-    divisions[k].display();
-  }
+  
   
 
 
@@ -147,6 +129,12 @@ if(gameState ==="restart"){
       particle = null;
       if (count>=5) gameState ="launch";
     }
+    else if(particle.body.position.x > 710 || particle.body.position.x < 300 ){
+      score = 0;
+      particle = null;
+      gameState ="end";
+    }
+
     else if(particle.body.position.x < 400 || particle.body.position.x > 610 ){
       score = score + 1000000;
       particle = null;
@@ -157,14 +145,53 @@ if(gameState ==="restart"){
       particle = null;
       if (count>=5) gameState ="launch";
     }
-    else if(particle.body.position.x < 312 || particle.body.position.x > 700 ){
-      score = 0;
-      particle = null;
-      gameState ="end";
-    }
+   
   }
  }
+ if ( gameState =="launch"){
+   // background(bg);
+   image(bg,500,320,1000,640);
+  textSize(100);
+  fill("yellow");
+  text("YOU WIN : "+score,20,300);  
+  
+  textSize(70);
+  fill("yellow");
+  text("press space to restart the game",10,400); 
 
+  plinkos.visiable=false;
+ divisions.visiable=false;
+ 
+  if(keyCode === 32 && gameState==="launch"){
+    gameState="restart";
+  }
+ } 
+if (gameState =="end"){
+  //background();
+  image(bg,500,320,1000,640);
+textSize(100);
+fill("yellow");
+text("YOU LOST",250,300); 
+
+  textSize(70);
+  fill("yellow");
+  text("press space to restart the game",10,400);
+
+   
+ //particle.visiable=false;
+ 
+  if(keyCode === 32 && gameState==="end"){
+    gameState="restart";
+  }
+} 
+ if(gameState ==="restart"){
+  score = 0;
+  count = 0;
+  particle!=null;
+  particles.visiable=true;
+  gameState="start";
+  //gameState!="launch";
+}
 }
 
   
