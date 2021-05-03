@@ -192,7 +192,7 @@ text("YOU LOST",250,300);
   gameState="start";
   //gameState!="launch";
 }
-}
+}  
 
   
 function mousePressed(){
